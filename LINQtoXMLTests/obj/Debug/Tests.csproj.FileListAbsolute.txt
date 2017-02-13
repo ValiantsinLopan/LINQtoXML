@@ -1,0 +1,8 @@
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\bin\Debug\LINQtoXMLTests.dll
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\bin\Debug\LINQtoXMLTests.pdb
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\bin\Debug\LINQtoXML.dll
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\bin\Debug\LINQtoXML.pdb
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\obj\Debug\Tests.csprojResolveAssemblyReference.cache
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\obj\Debug\LINQtoXMLTests.dll
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\obj\Debug\LINQtoXMLTests.pdb

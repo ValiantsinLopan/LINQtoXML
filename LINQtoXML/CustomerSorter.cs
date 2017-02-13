@@ -9,24 +9,54 @@ namespace LINQtoXML
 {
     public class CustomerSorter
     {
+        public static XDocument xdoc = XDocument.Load(@"D:\VALIANTSIN\TAT LAB\LINQtoXML\Data\RD. HW - AT Lab#. 05 - Customers.xml");
         
         public void SortCustomersByCountry()
         {
-            XDocument xdoc = XDocument.Load(@"D:\VALIANTSIN\TAT LAB\RD. HW - AT Lab#. 05 - Customers.xml");
             var groups =
-                from customer in xdoc.Root.Elements("customer")
+                from customer in xdoc.Descendants("customer")
                 group customer by new { country = (string)customer.Element("country") } into g
                 select new { g.Key,g};
-            foreach(var group in groups)
+
+            foreach (var group in groups)
             {
                 Console.WriteLine("Country: {0}",group.Key.country);
                 foreach (var customer in group.g)
                 {
-                    Console.WriteLine("\tCustomer Name: {0}; Customer ID: {1}", (string)customer.Element("name"), (string)customer.Element("id"));
+                    Console.WriteLine("\tCustomer Name: {0}", (string)customer.Element("name"));
                 }
                 Console.WriteLine();
             }
-           // Console.ReadKey();    
+        }
+
+        public void CustomersWithTotalSum(double X)
+        {
+            var customers =
+                from el in xdoc.Descendants("customer")
+                where el.Descendants("total").Sum(e => double.Parse(e.Value)) > X
+                select el;
+
+            Console.WriteLine($"Customers with total sum of orders more then {X}");    
+            foreach (var customer in customers)
+            {
+                Console.WriteLine(customer.Element("name").Value);
+            }
+        }
+
+        public void CustomersWithOrderSumMoreThen(double X)
+        {
+            var customers =
+                from cus in xdoc.Descendants("customer")//.Descendants("total")
+                from el in cus.Descendants("total")
+                where double.Parse(el.Value) > X
+                select cus;
+
+            Console.WriteLine($"Customers with orders total more then {X}");
+            foreach (var customer in customers)
+            {
+                Console.WriteLine(customer.Element("name").Value);
+            }
+
         }
     }
 }

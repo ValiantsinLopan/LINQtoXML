@@ -16,7 +16,21 @@ namespace LINQtoXML.Tests
         {
             var a = new CustomerSorter();
             a.SortCustomersByCountry();
-            
+
+        }
+
+        [TestMethod()]
+        public void CustomersWithTotalSumTest()
+        {
+            var a = new CustomerSorter();
+            a.CustomersWithTotalSum(4300);
+        }
+
+        [TestMethod()]
+        public void CustomersWithOrderSumMoreThenTest()
+        {
+            var a = new CustomerSorter();
+            a.CustomersWithOrderSumMoreThen(880);
         }
     }
 }

@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQtoXML", "LINQtoXML\LINQtoXML.csproj", "{A80D172B-5DD6-4644-8986-6DB2AB766887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LINQtoXMLTests", "LINQtoXMLTests\LINQtoXMLTests.csproj", "{CCE57461-D834-4061-8C82-6FE7811CD142}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "LINQtoXMLTests\Tests.csproj", "{CCE57461-D834-4061-8C82-6FE7811CD142}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
