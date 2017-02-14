@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml;
+using System.Text.RegularExpressions;
 namespace LINQtoXML
 {
     public class CustomerSorter
@@ -49,13 +50,31 @@ namespace LINQtoXML
                 .Elements("customer")
                 .Where(el => el.Element("orders").Elements("order").Any(element => double.Parse(element.Element("total").Value) > X));
                 
-
             Console.WriteLine($"Customers with orders total more then {X}");
             foreach (var customer in customers)
             {
                 Console.WriteLine(customer.Element("name").Value);
             }
 
+        }
+
+        public void NoDigitInPostCodeNoRegionNoPhoneCode()
+        {
+            var customers =
+                from c in xdoc.Element("customers").Elements("customer")
+                where c.Elements("postalcode").Any(e => e.Value.Any(x => char.IsLetter(x)))||
+                    c.Elements("phone").Any(e => e.Value.Contains("("))
+                select c;
+
+
+           
+            foreach (var customer in customers)
+            {
+                Console.WriteLine("Customer: {0},\tPostalcode: {1},\tPhone: {2}", 
+                    customer.Element("name").Value,
+                    customer.Element("postalcode").Value,
+                    customer.Element("phone").Value);
+            }
         }
     }
 }

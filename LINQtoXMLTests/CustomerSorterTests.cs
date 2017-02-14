@@ -32,5 +32,12 @@ namespace LINQtoXML.Tests
             var a = new CustomerSorter();
             a.CustomersWithOrderSumMoreThen(880);
         }
+
+        [TestMethod()]
+        public void NoDigitInPostCodeNoRegionNoPhoneCodeTest()
+        {
+            var a = new CustomerSorter();
+            a.NoDigitInPostCodeNoRegionNoPhoneCode();
+        }
     }
 }
