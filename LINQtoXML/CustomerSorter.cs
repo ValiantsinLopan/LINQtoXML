@@ -45,11 +45,10 @@ namespace LINQtoXML
 
         public void CustomersWithOrderSumMoreThen(double X)
         {
-            var customers =
-                from cus in xdoc.Descendants("customer")//.Descendants("total")
-                from el in cus.Descendants("total")
-                where double.Parse(el.Value) > X
-                select cus;
+            var customers = xdoc.Element("customers")
+                .Elements("customer")
+                .Where(el => el.Element("orders").Elements("order").Any(element => double.Parse(element.Element("total").Value) > X));
+                
 
             Console.WriteLine($"Customers with orders total more then {X}");
             foreach (var customer in customers)
