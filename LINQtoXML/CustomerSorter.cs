@@ -63,7 +63,8 @@ namespace LINQtoXML
             var customers =
                 from c in xdoc.Element("customers").Elements("customer")
                 where c.Elements("postalcode").Any(e => e.Value.Any(x => char.IsLetter(x)))||
-                    c.Elements("phone").Any(e => e.Value.Contains("("))
+                    c.Elements("phone").Any(e => e.Value.Contains("("))||
+                    c.Elements("region").Any()==false
                 select c;
 
 
