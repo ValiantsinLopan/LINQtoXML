@@ -39,5 +39,19 @@ namespace LINQtoXML.Tests
             var a = new CustomerSorter();
             a.NoDigitInPostCodeNoRegionNoPhoneCode();
         }
+
+        [TestMethod()]
+        public void FirstOrderDateTest()
+        {
+            var a = new CustomerSorter();
+            a.FirstOrderDate();
+        }
+
+        [TestMethod()]
+        public void AverageProfitAndIntensityInCityTest()
+        {
+            var a = new CustomerSorter();
+            a.AverageProfitAndIntensityInCity();
+        }
     }
 }
