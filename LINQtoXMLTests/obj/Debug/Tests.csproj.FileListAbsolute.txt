@@ -6,3 +6,4 @@ D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\bin\Debug\LINQtoXML.pdb
 D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\obj\Debug\Tests.csprojResolveAssemblyReference.cache
 D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\obj\Debug\LINQtoXMLTests.dll
 D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\obj\Debug\LINQtoXMLTests.pdb
+D:\VALIANTSIN\TAT LAB\LINQtoXML\LINQtoXMLTests\bin\Debug\ru\Microsoft.VisualStudio.QualityTools.UnitTestFramework.resources.dll

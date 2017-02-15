@@ -45,7 +45,7 @@ namespace LINQtoXML
                 file.WriteLine($"Customers with total sum of orders more then {X}\n");
                 foreach (var customer in customers)
                 {
-                    file.WriteLine(customer.Element("name").Value);
+                    file.WriteLine(customer.Element("name")?.Value);
                 }
             }
         }
@@ -77,10 +77,7 @@ namespace LINQtoXML
             {
                 foreach (var customer in customers)
                 {
-                    file.WriteLine("Customer: {0},\tPostalcode: {1},\tPhone: {2}",
-                        customer.Element("name")?.Value,
-                        customer.Element("postalcode")?.Value,
-                        customer.Element("phone")?.Value);
+                    file.WriteLine($"{customer.Element("name")?.Value,-40}\tPostalcode: {customer.Element("postalcode")?.Value,5}\tPhone: {customer.Element("phone")?.Value,5}");
                 }
 
             }
@@ -190,44 +187,50 @@ namespace LINQtoXML
 
         public void Statistics()
         {
-            var byMounth =
+            var byMonth =
                  from orders in xdoc.Descendants("order")
                  group orders by new { month = DateTime.Parse(orders.Element("orderdate").Value).Month } into c
+                 orderby c.Key.month
                  select c;
 
             var byYear =
                  from orders in xdoc.Descendants("order")
                  group orders by new { year = DateTime.Parse(orders.Element("orderdate").Value).Year } into c
+                 orderby c.Key.year
                  select c;
+            /*
+                        var byYearMonth =
+                             from orders in xdoc.Descendants("order")
+                             group orders by new { month = DateTime.Parse(orders.Element("orderdate").Value).Month} into months
+                             group months  by new { year = DateTime.Parse(months.Element("orderdate").Value).Year } into years
+                             select years;
 
-           
-            foreach (var mongh in byMounth)
+                        foreach (var year in byYearMonth)
+                        {
+                            Console.WriteLine($"Year: {year.Key.year} {year.Count()}");
+
+                                /*foreach(var month in year)
+                            {
+                                Console.WriteLine($"Month:  {month.c.Count()}");
+                            }
+                        }
+            */
+            using (StreamWriter file = new StreamWriter(@"D:\VALIANTSIN\TAT LAB\LINQtoXML\Data\8.txt"))
             {
-                Console.WriteLine($"Month: {mongh.Key.month}");
-                Console.WriteLine($"Number of orders: {mongh.Count()}");
-                Console.WriteLine();
-            }
+                foreach (var month in byMonth)
+                {
+                    file.WriteLine($"Month: {month.Key.month}");
+                    file.WriteLine($"Number of orders: {month.Count()}");
+                }
+                file.WriteLine();
+                foreach (var year in byYear)
+                {
+                    file.WriteLine($"Year: {year.Key.year}");
+                    file.WriteLine($"Number of orders: {year.Count()}");
+                }
 
-            foreach (var year in byYear)
-            {
-                Console.WriteLine($"Year: {year.Key.year}");
-                Console.WriteLine($"Number of orders: {year.Count()}");
-                Console.WriteLine();
             }
-
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
+        
     }
 }
