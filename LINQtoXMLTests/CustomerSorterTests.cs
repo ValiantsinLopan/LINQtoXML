@@ -53,5 +53,19 @@ namespace LINQtoXML.Tests
             var a = new CustomerSorter();
             a.AverageProfitAndIntensityInCity();
         }
+
+        [TestMethod()]
+        public void OrderByYearMounthTurnoverNameTest()
+        {
+            var a = new CustomerSorter();
+            a.OrderByYearMounthTurnoverName();
+        }
+
+        [TestMethod()]
+        public void StatisticsTest()
+        {
+            var a = new CustomerSorter();
+            a.Statistics();
+        }
     }
 }

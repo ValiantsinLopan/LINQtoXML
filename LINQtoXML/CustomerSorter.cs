@@ -69,18 +69,18 @@ namespace LINQtoXML
         {
             var customers =
                 from c in xdoc.Element("customers").Elements("customer")
-                where c.Elements("postalcode").Any(e => e.Value.Any(x => char.IsLetter(x))) ||
-                      c.Elements("phone").Any(e => e.Value.Contains("(")) ||
-                      c.Elements("region").Any() == false
+                where c.Elements("postalcode").Any() != c.Elements("postalcode").Any(e => e.Value.All(x => char.IsDigit(x))) ||
+                      c.Elements("phone").Any() != c.Elements("phone").Any(e=>e.Value.Contains("(")) ||
+                      !c.Elements("region").Any()
                 select c;
             using (StreamWriter file = new StreamWriter(@"D:\VALIANTSIN\TAT LAB\LINQtoXML\Data\6.txt"))
             {
                 foreach (var customer in customers)
                 {
                     file.WriteLine("Customer: {0},\tPostalcode: {1},\tPhone: {2}",
-                        customer.Element("name").Value,
-                        customer.Element("postalcode").Value,
-                        customer.Element("phone").Value);
+                        customer.Element("name")?.Value,
+                        customer.Element("postalcode")?.Value,
+                        customer.Element("phone")?.Value);
                 }
 
             }
@@ -91,14 +91,14 @@ namespace LINQtoXML
         {
             var customers =
                 from c in xdoc.Element("customers").Elements("customer")
-                where (c.Descendants("order").Any() == true)
+                where c.Descendants("order").Any() == true
                 select c;
             using (StreamWriter file = new StreamWriter(@"D:\VALIANTSIN\TAT LAB\LINQtoXML\Data\4.txt"))
             {
                 foreach (var customer in customers)
                 {
                     var date = DateTime.Parse(customer.Descendants("orderdate").First().Value);
-                    file.WriteLine($"{customer.Element("name").Value} is customer from {date.Month} {date.Year}");
+                    file.WriteLine(string.Format($"{ customer.Element("name").Value,-40}\t{date.Month,5} { date.Year,5}"));
                     
                 }
             }
@@ -112,16 +112,16 @@ namespace LINQtoXML
                 select c;
             using (StreamWriter file = new StreamWriter(@"D:\VALIANTSIN\TAT LAB\LINQtoXML\Data\7.txt"))
             {
-                foreach (var custInCity in cities)
+                foreach (var customer in cities)
                 {
-                    var average = custInCity.Descendants("total").Average(sum => double.Parse(sum.Value));
-                    var intensity = (double)custInCity.Descendants("order").Count() / (double)custInCity.Count();
+                    var average = customer.Descendants("total").Average(sum => double.Parse(sum.Value));
+                    var intensity = (double)customer.Descendants("order").Count() / (double)customer.Count();
 
-                    file.WriteLine($"In {custInCity.Key.city} average profit is  {average}, intensity of orders: {intensity}");
+                    file.WriteLine($"In {customer.Key.city} average profit is  {average}, intensity of orders: {intensity}");
                     file.WriteLine("\tCustomers:");
-                    foreach (var customer in custInCity)
+                    foreach (var el in customer)
                     {
-                        file.WriteLine($"\t{customer.Element("name").Value}");
+                        file.WriteLine($"\t{el.Element("name").Value}");
                     }
                     file.WriteLine();
                 }
@@ -129,8 +129,93 @@ namespace LINQtoXML
 
         }
 
+        public void OrderByYearMounthTurnoverName()
+        {
+            
+            var customersByYear =
+                 from c in xdoc.Descendants("customer")
+                 where c.Descendants("order").Any() == true
+                 orderby DateTime.Parse(c.Descendants("orderdate").First().Value).Year
+                 select c;
 
+            var customersByMonth =
+                 from c in xdoc.Descendants("customer")
+                 where c.Descendants("order").Any() == true
+                 orderby DateTime.Parse(c.Descendants("orderdate").First().Value).Month
+                 select c;
+            var customersByTurnover = 
+                from c in xdoc.Descendants("customer")
+                where c.Descendants("order").Any() == true
+                orderby c.Descendants("total").Sum(e => double.Parse(e.Value)) descending
+                select c;
+            var customersByName =
+                from c in xdoc.Descendants("customer")
+                orderby c.Element("name").Value
+                select c;
+            
+            using (StreamWriter file = new StreamWriter(@"D:\VALIANTSIN\TAT LAB\LINQtoXML\Data\5.txt"))
+            {
+                file.WriteLine("\tCustomers sorted by year of first order");
+                file.WriteLine();
+                foreach (var customer in customersByYear)
+                {
+                    file.WriteLine(string.Format($"{DateTime.Parse(customer.Descendants("orderdate").First().Value).Year,-5}\t{customer.Element("name").Value,5} "));
 
+                }
+                file.WriteLine();
+                file.WriteLine("\tCustomers sorted by mounth of first order");
+                file.WriteLine();
+                foreach (var customer in customersByMonth)
+                {
+                    var month = DateTime.Parse(customer.Descendants("orderdate").First().Value).Month;
+                    var year = DateTime.Parse(customer.Descendants("orderdate").First().Value).Year;
+                    file.WriteLine(string.Format($"{month,-5}{year,-5}\t{customer.Element("name").Value,5} "));
+                }
+                file.WriteLine();
+                file.WriteLine("\tCustomers sorted by turnover");
+                file.WriteLine();
+                foreach (var customer in customersByTurnover)
+                {
+                    file.WriteLine($"{customer.Descendants("total").Sum(e => double.Parse(e.Value)),-10}\t{customer.Element("name").Value}");
+                }
+                file.WriteLine();
+                file.WriteLine("\tCustomers sorted by name");
+                file.WriteLine();
+                foreach (var customer in customersByName)
+                {
+                    file.WriteLine($"{customer.Element("name").Value,-5}");
+                }
+            }
+        }
+
+        public void Statistics()
+        {
+            var byMounth =
+                 from orders in xdoc.Descendants("order")
+                 group orders by new { month = DateTime.Parse(orders.Element("orderdate").Value).Month } into c
+                 select c;
+
+            var byYear =
+                 from orders in xdoc.Descendants("order")
+                 group orders by new { year = DateTime.Parse(orders.Element("orderdate").Value).Year } into c
+                 select c;
+
+           
+            foreach (var mongh in byMounth)
+            {
+                Console.WriteLine($"Month: {mongh.Key.month}");
+                Console.WriteLine($"Number of orders: {mongh.Count()}");
+                Console.WriteLine();
+            }
+
+            foreach (var year in byYear)
+            {
+                Console.WriteLine($"Year: {year.Key.year}");
+                Console.WriteLine($"Number of orders: {year.Count()}");
+                Console.WriteLine();
+            }
+
+        }
 
 
 
